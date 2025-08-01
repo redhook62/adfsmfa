@@ -36,6 +36,24 @@ using System.Xml;
 
 namespace Neos.IdentityServer.MultiFactor
 {
+
+    #region WCFBind
+    /// <summary>
+    /// WCF default bindings values
+    /// </summary>
+    internal static class WCFBind
+    {
+        internal readonly static bool useEncryption = true;
+        internal readonly static short MaxCalls = short.MaxValue;
+        internal readonly static short MaxSessions = short.MaxValue;
+        internal readonly static short MaxInstances = short.MaxValue;
+        internal readonly static short MaxConnections = short.MaxValue;
+        internal readonly static int MaxReceivedMessageSize = int.MaxValue;
+        internal readonly static TimeSpan OpenTimeout = new TimeSpan(0, 0, 30);
+        internal readonly static TimeSpan SendTimeout = new TimeSpan(0, 1, 30);
+    }
+    #endregion
+
     #region ReplayServiceHost
     /// <summary>
     /// ReplayServiceHost Class
@@ -469,8 +487,6 @@ namespace Neos.IdentityServer.MultiFactor
     /// </summary>
     public class ReplayServer<T>
     {
-        private readonly bool useEncryption = true;
-
         /// <summary>
         /// StartService method implementation
         /// </summary>
@@ -527,21 +543,24 @@ namespace Neos.IdentityServer.MultiFactor
                 {
                     prf = new ServiceThrottlingBehavior
                     {
-                        MaxConcurrentCalls = 256,
-                        MaxConcurrentInstances = 256,
-                        MaxConcurrentSessions = 256
+                        MaxConcurrentCalls = WCFBind.MaxCalls,
+                        MaxConcurrentInstances = WCFBind.MaxInstances,
+                        MaxConcurrentSessions = WCFBind.MaxSessions
                     };
                     Servicehost.Description.Behaviors.Add(prf);
                 }
                 else
                 {
-                    prf.MaxConcurrentCalls = 250;
-                    prf.MaxConcurrentInstances = 250;
-                    prf.MaxConcurrentSessions = 250;
+                    prf.MaxConcurrentCalls = WCFBind.MaxCalls;
+                    prf.MaxConcurrentInstances = WCFBind.MaxInstances;
+                    prf.MaxConcurrentSessions = WCFBind.MaxSessions;
                 }
-                NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport);
+                NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport)
+                {
+                    MaxConnections = WCFBind.MaxConnections,
+                    MaxReceivedMessageSize = WCFBind.MaxReceivedMessageSize
+                };
                 tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-                tcp.MaxConnections = 256;
 
                 List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>
                 {
@@ -551,7 +570,7 @@ namespace Neos.IdentityServer.MultiFactor
                 Servicehost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.UseWindowsGroups;
 
                 ServiceEndpoint svcendpoint = null;
-                if (useEncryption)
+                if (WCFBind.useEncryption)
                 {
                     CustomBinding custombinding = new CustomBinding(tcp)
                     {
@@ -632,8 +651,6 @@ namespace Neos.IdentityServer.MultiFactor
     /// </summary>
     public class WebThemesServer<T>
     {
-        private readonly bool useEncryption = true;
-
         /// <summary>
         /// StartService method implementation
         /// </summary>
@@ -690,21 +707,25 @@ namespace Neos.IdentityServer.MultiFactor
                 {
                     prf = new ServiceThrottlingBehavior
                     {
-                        MaxConcurrentCalls = 256,
-                        MaxConcurrentInstances = 256,
-                        MaxConcurrentSessions = 256
+                        MaxConcurrentCalls = WCFBind.MaxCalls,
+                        MaxConcurrentInstances = WCFBind.MaxInstances,
+                        MaxConcurrentSessions = WCFBind.MaxSessions
                     };
                     Servicehost.Description.Behaviors.Add(prf);
                 }
                 else
                 {
-                    prf.MaxConcurrentCalls = 250;
-                    prf.MaxConcurrentInstances = 250;
-                    prf.MaxConcurrentSessions = 250;
+                    prf.MaxConcurrentCalls = WCFBind.MaxCalls;
+                    prf.MaxConcurrentInstances = WCFBind.MaxInstances;
+                    prf.MaxConcurrentSessions = WCFBind.MaxSessions;
                 }
-                NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport);
+
+                NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport)
+                {
+                    MaxConnections = WCFBind.MaxConnections,
+                    MaxReceivedMessageSize = WCFBind.MaxReceivedMessageSize
+                };
                 tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-                tcp.MaxConnections = 256;
 
                 List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>
                 {
@@ -714,7 +735,7 @@ namespace Neos.IdentityServer.MultiFactor
                 Servicehost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.UseWindowsGroups;
 
                 ServiceEndpoint svcendpoint = null;
-                if (useEncryption)
+                if (WCFBind.useEncryption)
                 {
                     CustomBinding custombinding = new CustomBinding(tcp)
                     {
@@ -795,8 +816,6 @@ namespace Neos.IdentityServer.MultiFactor
     /// </summary>
     public class WebAdminServer<T>
     {
-        private readonly bool useEncryption = true;
-
         /// <summary>
         /// StartService method implementation
         /// </summary>
@@ -853,25 +872,26 @@ namespace Neos.IdentityServer.MultiFactor
                 {
                     prf = new ServiceThrottlingBehavior
                     {
-                        MaxConcurrentCalls = 256,
-                        MaxConcurrentInstances = 256,
-                        MaxConcurrentSessions = 256
+                        MaxConcurrentCalls = WCFBind.MaxCalls,
+                        MaxConcurrentInstances = WCFBind.MaxInstances,
+                        MaxConcurrentSessions = WCFBind.MaxSessions
                     };
                     Servicehost.Description.Behaviors.Add(prf);
                 }
                 else
                 {
-                    prf.MaxConcurrentCalls = 256;
-                    prf.MaxConcurrentInstances = 256;
-                    prf.MaxConcurrentSessions = 256;
+                    prf.MaxConcurrentCalls = WCFBind.MaxCalls;
+                    prf.MaxConcurrentInstances = WCFBind.MaxInstances;
+                    prf.MaxConcurrentSessions = WCFBind.MaxSessions;
                 }
 
                 NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport)
                 {
-                    MaxConnections = 256,
-                    MaxReceivedMessageSize = 2147483647
+                    MaxConnections = WCFBind.MaxConnections,
+                    MaxReceivedMessageSize = WCFBind.MaxReceivedMessageSize
                 };
                 tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
+
 
                 List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>
                 {
@@ -881,7 +901,7 @@ namespace Neos.IdentityServer.MultiFactor
                 Servicehost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.UseWindowsGroups;
 
                 ServiceEndpoint svcendpoint = null;
-                if (useEncryption)
+                if (WCFBind.useEncryption)
                 {
                     CustomBinding custombinding = new CustomBinding(tcp)
                     {
@@ -962,8 +982,6 @@ namespace Neos.IdentityServer.MultiFactor
     /// </summary>
     public class NTServiceServer<T>
     {
-        private readonly bool useEncryption = true;
-
         /// <summary>
         /// StartService method implementation
         /// </summary>
@@ -1020,21 +1038,22 @@ namespace Neos.IdentityServer.MultiFactor
                 {
                     prf = new ServiceThrottlingBehavior
                     {
-                        MaxConcurrentCalls = 256,
-                        MaxConcurrentInstances = 256,
-                        MaxConcurrentSessions = 256
+                        MaxConcurrentCalls = WCFBind.MaxCalls,
+                        MaxConcurrentInstances = WCFBind.MaxInstances,
+                        MaxConcurrentSessions = WCFBind.MaxSessions
                     };
                     Servicehost.Description.Behaviors.Add(prf);
                 }
                 else
                 {
-                    prf.MaxConcurrentCalls = 250;
-                    prf.MaxConcurrentInstances = 250;
-                    prf.MaxConcurrentSessions = 250;
+                    prf.MaxConcurrentCalls = WCFBind.MaxCalls;
+                    prf.MaxConcurrentInstances = WCFBind.MaxInstances;
+                    prf.MaxConcurrentSessions = WCFBind.MaxSessions;
                 }
                 NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport)
                 {
-                    MaxConnections = 256
+                    MaxConnections = WCFBind.MaxConnections,
+                    MaxReceivedMessageSize = WCFBind.MaxReceivedMessageSize
                 };
                 tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
 
@@ -1046,7 +1065,7 @@ namespace Neos.IdentityServer.MultiFactor
                 Servicehost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.UseWindowsGroups;
 
                 ServiceEndpoint svcendpoint = null;
-                if (useEncryption)
+                if (WCFBind.useEncryption)
                 {
                     CustomBinding custombinding = new CustomBinding(tcp)
                     {
@@ -1128,7 +1147,6 @@ namespace Neos.IdentityServer.MultiFactor
     public class ReplayClient
     {
         private ChannelFactory<IReplay> _factory = null;
-        private readonly bool useEncryption = true;
 
         public bool IsInitialized { get; private set; }
 
@@ -1144,11 +1162,11 @@ namespace Neos.IdentityServer.MultiFactor
             }
             NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport);
             tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-            tcp.MaxConnections = 256;
-            tcp.OpenTimeout = new TimeSpan(0, 0, 5);
-            tcp.SendTimeout = new TimeSpan(0, 0, 15);
+            tcp.MaxConnections = WCFBind.MaxConnections;
+            tcp.OpenTimeout = WCFBind.OpenTimeout;
+            tcp.SendTimeout = WCFBind.SendTimeout;
 
-            if (useEncryption)
+            if (WCFBind.useEncryption)
             {
                 CustomBinding custombinding = new CustomBinding(tcp)
                 {
@@ -1223,7 +1241,6 @@ namespace Neos.IdentityServer.MultiFactor
     public class WebThemesClient
     {
         private ChannelFactory<IWebThemeManager> _factory = null;
-        private readonly bool useEncryption = true;
 
         public bool IsInitialized { get; private set; }
 
@@ -1239,8 +1256,11 @@ namespace Neos.IdentityServer.MultiFactor
             }
             NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport);
             tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-            tcp.MaxConnections = 256;
-            if (useEncryption)
+            tcp.MaxConnections = WCFBind.MaxConnections;
+            tcp.OpenTimeout = WCFBind.OpenTimeout;
+            tcp.SendTimeout = WCFBind.SendTimeout;
+
+            if (WCFBind.useEncryption)
             {
                 CustomBinding custombinding = new CustomBinding(tcp)
                 {
@@ -1315,7 +1335,6 @@ namespace Neos.IdentityServer.MultiFactor
     public class WebAdminClient
     {
         private ChannelFactory<IWebAdminServices> _factory = null;
-        private readonly bool useEncryption = true;
 
         public bool IsInitialized { get; private set; }
 
@@ -1331,9 +1350,12 @@ namespace Neos.IdentityServer.MultiFactor
             }
             NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport);
             tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-            tcp.MaxReceivedMessageSize = 2147483647;
+            tcp.MaxConnections = WCFBind.MaxConnections;
+            tcp.OpenTimeout = WCFBind.OpenTimeout;
+            tcp.SendTimeout = WCFBind.SendTimeout;
+            tcp.MaxReceivedMessageSize = WCFBind.MaxReceivedMessageSize;
 
-            if (useEncryption)
+            if (WCFBind.useEncryption)
             {
                 CustomBinding custombinding = new CustomBinding(tcp)
                 {
@@ -1409,7 +1431,6 @@ namespace Neos.IdentityServer.MultiFactor
     public class NTServiceClient
     {
         private ChannelFactory<INTService> _factory = null;
-        private readonly bool useEncryption = true;
 
         public bool IsInitialized { get; private set; }
 
@@ -1425,8 +1446,12 @@ namespace Neos.IdentityServer.MultiFactor
             }
             NetTcpBinding tcp = new NetTcpBinding(SecurityMode.Transport);
             tcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
+            tcp.MaxConnections = WCFBind.MaxConnections;
+            tcp.OpenTimeout = WCFBind.OpenTimeout;
+            tcp.SendTimeout = WCFBind.SendTimeout;
+            tcp.MaxReceivedMessageSize = WCFBind.MaxReceivedMessageSize;
 
-            if (useEncryption)
+            if (WCFBind.useEncryption)
             {
                 CustomBinding custombinding = new CustomBinding(tcp)
                 {

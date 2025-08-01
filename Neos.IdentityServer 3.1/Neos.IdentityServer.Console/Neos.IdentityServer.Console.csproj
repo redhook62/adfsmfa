@@ -247,6 +247,11 @@
     </Compile>
     <Compile Include="Neos.IdentityServer.Console.DataContracts.cs" />
     <Compile Include="Neos.IdentityServer.Console.Utilities.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="PropertyPages\Neos.IdentityServer.Console.UserPropertyPages.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1285,6 +1290,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Neos.IdentityServer.Console.RootViewControl.es.resx">
       <DependentUpon>Neos.IdentityServer.Console.RootViewControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Neos.IdentityServer.Console.RootViewControl.fr.resx">
       <DependentUpon>Neos.IdentityServer.Console.RootViewControl.cs</DependentUpon>
@@ -1688,6 +1694,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Neos.IdentityServer.Console.UsersViewControl.uk.resx">
       <DependentUpon>Neos.IdentityServer.Console.UsersViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\errors_strings.da.resx" />
     <EmbeddedResource Include="Resources\errors_strings.de.resx" />

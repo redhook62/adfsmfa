@@ -156,7 +156,7 @@ namespace Neos.IdentityServer.MultiFactor.NotificationHub
             }
             catch (Exception e)
             {
-                this.EventLog.WriteEntry(string.Format("Error when starting ReplayService : {0}.", e.Message), EventLogEntryType.Error, 1001);
+                this.EventLog.WriteEntry(string.Format("Error when starting ReplayService : {0}.", e.Message), EventLogEntryType.Error, 1002);
             }
         }
 

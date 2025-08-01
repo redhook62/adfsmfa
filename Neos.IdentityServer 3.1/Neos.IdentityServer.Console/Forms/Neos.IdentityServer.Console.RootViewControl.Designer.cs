@@ -32,7 +32,6 @@
             this.GlobalViewlabel = new System.Windows.Forms.Label();
             this.GlobalViewLabelText = new System.Windows.Forms.Label();
             this.pictureNeosSdi = new System.Windows.Forms.PictureBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureNeosSdi)).BeginInit();
@@ -45,6 +44,7 @@
             // 
             // GlobalViewLabelText
             // 
+            this.GlobalViewLabelText.AutoEllipsis = true;
             resources.ApplyResources(this.GlobalViewLabelText, "GlobalViewLabelText");
             this.GlobalViewLabelText.Name = "GlobalViewLabelText";
             // 
@@ -53,13 +53,6 @@
             resources.ApplyResources(this.pictureNeosSdi, "pictureNeosSdi");
             this.pictureNeosSdi.Name = "pictureNeosSdi";
             this.pictureNeosSdi.TabStop = false;
-            // 
-            // linkLabel1
-            // 
-            resources.ApplyResources(this.linkLabel1, "linkLabel1");
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // linkLabel3
             // 
@@ -83,7 +76,6 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.linkLabel3);
-            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.pictureNeosSdi);
             this.Controls.Add(this.GlobalViewLabelText);
             this.Controls.Add(this.GlobalViewlabel);
@@ -99,7 +91,6 @@
         private System.Windows.Forms.Label GlobalViewlabel;
         private System.Windows.Forms.Label GlobalViewLabelText;
         private System.Windows.Forms.PictureBox pictureNeosSdi;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel3;
         private System.Windows.Forms.RichTextBox richTextBox1;
     }

@@ -3901,6 +3901,10 @@ namespace Neos.IdentityServer.MultiFactor
         internal static bool CheckForReplay(MFAConfig config, AuthenticationContext usercontext, int totp)
         {
             bool OK = false;
+            string fqdn = Dns.GetHostEntry("localhost").HostName;
+            List<string> srv = (from servers in config.Hosts.ADFSFarm.Servers
+                                where (servers.FQDN.ToLower() != fqdn.ToLower())
+                                select servers.FQDN.ToLower()).ToList<string>();
             try
             {
                 ReplayRecord message = new ReplayRecord()
@@ -3913,14 +3917,11 @@ namespace Neos.IdentityServer.MultiFactor
                     UserLogon = usercontext.LogonDate,
                     DeliveryWindow = config.DeliveryWindow
                 };
-                string fqdn = Dns.GetHostEntry("localhost").HostName;
-                List<string> srv = (from servers in config.Hosts.ADFSFarm.Servers
-                                    where (servers.FQDN.ToLower() != fqdn.ToLower())
-                                    select servers.FQDN.ToLower()).ToList<string>();
                 OK = ReplayManagerClient.Check(srv, message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.WriteEntry(string.Format("Error during checking anti-replay feature for user : {0} IP: {1} MESSAGE : {2}", usercontext.UPN, usercontext.IPAddress, ex.Message), EventLogEntryType.Error, 1011);
                 return true;
             }
             return OK;

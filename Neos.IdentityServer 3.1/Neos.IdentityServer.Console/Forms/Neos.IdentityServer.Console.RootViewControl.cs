@@ -118,17 +118,17 @@ namespace Neos.IdentityServer.Console
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://www.neos-sdi.com");
+            System.Diagnostics.Process.Start("redhook software");
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://adfsmfa.codeplex.com");
+            System.Diagnostics.Process.Start("redhook software");
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/neos-sdi/adfsmfa/releases");
+            System.Diagnostics.Process.Start("https://github.com/redhook62/adfsmfa/releases");
         }
     }
 }
