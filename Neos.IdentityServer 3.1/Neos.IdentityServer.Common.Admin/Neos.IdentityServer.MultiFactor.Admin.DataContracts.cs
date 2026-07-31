@@ -12,7 +12,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               //
 //                                                                                                                                                                                          //
 //                                                                                                                                                                                          //
-// https://github.com/neos-sdi/adfsmfa                                                                                                                                                      //
+// https://github.com/redhook62/adfsmfa                                                                                                                                                     //
 //                                                                                                                                                                                          //
 //******************************************************************************************************************************************************************************************//
 using System;
@@ -468,6 +468,7 @@ namespace Neos.IdentityServer.MultiFactor.Administration
             DomainAddress = adds.DomainAddress;
             Account = adds.Account;
             SQLAccount = sql.SQLAccount;
+
             using (SystemEncryption MSIS = new SystemEncryption())
             {
                 Password = MSIS.Encrypt(adds.Password, "ADDS Super Account Password");
@@ -503,6 +504,7 @@ namespace Neos.IdentityServer.MultiFactor.Administration
             adds.DomainAddress = this.DomainAddress;
             adds.Account = this.Account;
             sql.SQLAccount = this.SQLAccount;
+
             using (SystemEncryption MSIS = new SystemEncryption())
             {
                 adds.Password = MSIS.Decrypt(Password, "ADDS Super Account Password");
@@ -511,6 +513,7 @@ namespace Neos.IdentityServer.MultiFactor.Administration
                 cfg.DefaultPin = MSIS.Decrypt(DefaultPin, "Default Users Pin");
                 cfg.AdministrationPin = MSIS.Decrypt(AdministrationPin, "Administration Pin");
             };
+
             ManagementService.ADFSManager.WriteConfiguration(host);
         }
     }
@@ -923,10 +926,12 @@ namespace Neos.IdentityServer.MultiFactor.Administration
             ForceWizard = mail.ForceWizard;
             From = mail.From;
             UserName = mail.UserName;
+
             using (SystemEncryption MSIS = new SystemEncryption())
             {
                 Password = MSIS.Encrypt(mail.Password, "Mail Provider Account Password");
             };
+
             Host = mail.Host;
             Port = mail.Port;
             UseSSL = mail.UseSSL;
@@ -988,10 +993,12 @@ namespace Neos.IdentityServer.MultiFactor.Administration
             mail.ForceWizard = ForceWizard;
             mail.From = From;
             mail.UserName = UserName;
+
             using (SystemEncryption MSIS = new SystemEncryption())
             {
                 mail.Password = MSIS.Decrypt(Password, "Mail Provider Account Password");
             };
+
             mail.Host = Host;
             mail.Port = Port;
             mail.UseSSL = UseSSL;

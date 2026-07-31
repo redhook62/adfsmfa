@@ -1,5 +1,5 @@
 ﻿//******************************************************************************************************************************************************************************************//
-// Copyright (c) 2024 redhook (adfsmfa@gmail.com)                                                                                                                                    //                        
+// Copyright (c) 2026 redhook (adfsmfa@gmail.com)                                                                                                                                           //                        
 //                                                                                                                                                                                          //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),                                       //
 // to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,   //
@@ -12,7 +12,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               //
 //                                                                                                                                                                                          //
 //                                                                                                                                                                                          //
-// https://github.com/neos-sdi/adfsmfa                                                                                                                                                      //
+// https://github.com/redhook62/adfsmfa                                                                                                                                                     //
 //                                                                                                                                                                                          //
 //******************************************************************************************************************************************************************************************//
 using System.Globalization;

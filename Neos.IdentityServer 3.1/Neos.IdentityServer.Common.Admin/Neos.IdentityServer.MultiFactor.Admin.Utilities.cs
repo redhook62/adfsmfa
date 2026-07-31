@@ -1,5 +1,5 @@
 ﻿//******************************************************************************************************************************************************************************************//
-// Copyright (c) 2024 redhook (adfsmfa@gmail.com)                                                                                                                                    //                        
+// Copyright (c) 2026 redhook (adfsmfa@gmail.com)                                                                                                                                           //                        
 //                                                                                                                                                                                          //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),                                       //
 // to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,   //
@@ -11,8 +11,8 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,                            //
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               //
 //                                                                                                                                                                                          //
-//                                                                                                                                                             //
-// https://github.com/neos-sdi/adfsmfa                                                                                                                                                      //
+//                                                                                                                                                                                          //
+// https://github.com/redhook62/adfsmfa                                                                                                                                                     //
 //                                                                                                                                                                                          //
 //******************************************************************************************************************************************************************************************//
 using Microsoft.Win32;
@@ -614,16 +614,13 @@ namespace Neos.IdentityServer.MultiFactor.Administration
                             config.KeysConfig.XORSecret = XORUtilities.DefaultKey;
                         }
                         else
-                        {
+                        {                         
                             config.KeysConfig.XORSecret = MSIS.Encrypt(config.KeysConfig.XORSecret, "Pass Phrase Encryption");
                             config.Hosts.ActiveDirectoryHost.Password = MSIS.Encrypt(config.Hosts.ActiveDirectoryHost.Password, "ADDS Super Account Password");
                             config.Hosts.SQLServerHost.SQLPassword = MSIS.Encrypt(config.Hosts.SQLServerHost.SQLPassword, "SQL Super Account Password");
                             config.MailProvider.Password = MSIS.Encrypt(config.MailProvider.Password, "Mail Provider Account Password");
                             config.DefaultPin = MSIS.Encrypt(config.DefaultPin, "Default Users Pin");
                             config.AdministrationPin = MSIS.Encrypt(config.AdministrationPin, "Administration Pin");
-
-                            if (!string.IsNullOrEmpty(value))
-                                host.UI.WriteWarningLine("Block Updates not allowed, values where only encrypted !");
                         }
                     }
                     break;
@@ -640,6 +637,7 @@ namespace Neos.IdentityServer.MultiFactor.Administration
                         {
                             if (string.IsNullOrEmpty(value))
                             {
+                                
                                 config.Hosts.ActiveDirectoryHost.Password = MSIS.Encrypt(config.Hosts.ActiveDirectoryHost.Password, "ADDS Super Account Password");
                                 host.UI.WriteWarningLine("Empty value not allowed, value was only encrypted !");
                             }
@@ -660,7 +658,7 @@ namespace Neos.IdentityServer.MultiFactor.Administration
                         else
                         {
                             if (string.IsNullOrEmpty(value))
-                            {
+                            {                               
                                 config.MailProvider.Password = MSIS.Encrypt(config.MailProvider.Password, "Mail Provider Account Password");
                                 host.UI.WriteWarningLine("Empty value not allowed, value was only encrypted !");
                             }

@@ -4,7 +4,7 @@ For security reasons, and to avoid unsafe code execution.
 The translation of the resources must be done by recompiling the code of the adfsmfa solution with Visual Studio and signing the code with your own key.
 
 Remember that this is an open-source project. 
-If you think you have a better translation and that it can be shared with everyone. you must post a pull-request at https://github.com/neos-sdi/adfsmfa/pulls. 
+If you think you have a better translation and that it can be shared with everyone. you must post a pull-request at https://github.com/redhook62/adfsmfa/pulls. 
 If these proposals are integrated, they will be maintained in the future.
 
 You can also offer translations for unsupported languages (French, English, Spanish (draft)), such as German, Italian, Russian, etc.

@@ -10,9 +10,9 @@ using System.Runtime.Versioning;
 [assembly: AssemblyTitle("Neos.IdentityServer.Multifactor.ThreatDetection")]
 [assembly: AssemblyDescription("Threat Detection for Adfs 2019")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("neos-sdi")]
+[assembly: AssemblyCompany("redhook")]
 [assembly: AssemblyProduct("Neos.IdentityServer.Multifactor.ThreatDetection")]
-[assembly: AssemblyCopyright("Copyright redhook © 2024")]
+[assembly: AssemblyCopyright("Copyright redhook © 2026")]
 [assembly: AssemblyTrademark("neos-sdi")]
 [assembly: AssemblyCulture("")]
 
@@ -35,6 +35,6 @@ using System.Runtime.Versioning;
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.1.2508.0")]
+[assembly: AssemblyFileVersion("3.1.2608.0")]
 [assembly: AssemblyInformationalVersion("3.0.0.0")]
 [assembly: NeutralResourcesLanguage("en")]

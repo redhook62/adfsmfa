@@ -1,6 +1,6 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui" >
 
-  <Package Name="MFA Provider for ADFS 2025/2022/2019/2016" Language="1033" Version="3.1.2508.0" Manufacturer="redhook software" UpgradeCode="a23dd485-5365-4d82-8309-103495000001" ProductCode="a23dd485-5365-4d82-8309-103494000001">
+  <Package Name="MFA Provider for ADFS 2025/2022/2019/2016" Language="1033" Version="3.1.2608.0" Manufacturer="redhook software" UpgradeCode="a23dd485-5365-4d82-8309-103495000001" ProductCode="a23dd485-5365-4d82-8309-103494000001">
 
     <SummaryInformation Description="Multi-Factor Authentication for ADFS 2025/2022/2019/2016" />
 

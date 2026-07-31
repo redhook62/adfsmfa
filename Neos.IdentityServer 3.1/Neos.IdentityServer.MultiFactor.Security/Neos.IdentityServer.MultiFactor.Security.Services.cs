@@ -1,5 +1,5 @@
 ﻿//******************************************************************************************************************************************************************************************//
-// Copyright (c) 2024 redhook (adfsmfa@gmail.com)                                                                                                                                    //                        
+// Copyright (c) 2024 redhook (adfsmfa@gmail.com)                                                                                                                                          //                        
 //                                                                                                                                                                                          //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),                                       //
 // to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,   //
@@ -11,8 +11,8 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,                            //
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               //
 //                                                                                                                                                                                          //
-//                                                                                                                                                             //
-// https://github.com/neos-sdi/adfsmfa                                                                                                                                                      //
+//                                                                                                                                                                                          //
+// https://github.com/redhook62/adfsmfa                                                                                                                                                     //
 //                                                                                                                                                                                          //
 //******************************************************************************************************************************************************************************************//
 using Microsoft.Win32;
@@ -1144,7 +1144,7 @@ namespace Neos.IdentityServer.MultiFactor
     /// <summary>
     /// ReplayClient class (Client Proxy)
     /// </summary>
-    public class ReplayClient
+    internal class ReplayClient
     {
         private ChannelFactory<IReplay> _factory = null;
 
@@ -1238,7 +1238,7 @@ namespace Neos.IdentityServer.MultiFactor
     /// <summary>
     /// WebThemesClient class (Client Proxy)
     /// </summary>
-    public class WebThemesClient
+    internal class WebThemesClient
     {
         private ChannelFactory<IWebThemeManager> _factory = null;
 
@@ -1332,7 +1332,7 @@ namespace Neos.IdentityServer.MultiFactor
     /// <summary>
     /// WebAdminClient class (Client Proxy)
     /// </summary>
-    public class WebAdminClient
+    internal class WebAdminClient
     {
         private ChannelFactory<IWebAdminServices> _factory = null;
 
@@ -1428,7 +1428,7 @@ namespace Neos.IdentityServer.MultiFactor
     /// <summary>
     /// NTServiceClient class (Client Proxy)
     /// </summary>
-    public class NTServiceClient
+    internal class NTServiceClient
     {
         private ChannelFactory<INTService> _factory = null;
 
@@ -1984,28 +1984,35 @@ namespace Neos.IdentityServer.MultiFactor
             else
                 customstate = (MFAAuthState)state;
 
-            bool bRet;
             if (!customstate.Checked)
             {
+                customstate.Checked = true;
                 if (!context.Properties.TryGetValue("Identities", out object obj))
-                    return false;
+                {
+                    customstate.Allowed = false;
+                    return customstate.Allowed;
+                }
 
                 IList<IIdentity> identities = obj as IList<IIdentity>;
                 if (obj == null || identities.Count <= 0)
-                    return false;
-                customstate.Checked = true;
+                {
+                    customstate.Allowed = false;
+                    return customstate.Allowed;
+                }
+
                 WindowsIdentity idt = (WindowsIdentity)identities[0];
                 WindowsPrincipal win = new WindowsPrincipal(idt);
                 if (ADFSManagementRolesChecker.IsAdministrator(win) || ADFSManagementRolesChecker.IsSystem(idt) || ADFSManagementRolesChecker.AllowedGroup(win, _delegatedgroupname))
                 {
                     context.Properties["Principal"] = win;
-                    return true;
+                    customstate.Allowed = true;
                 }
-                bRet = true;
+                else
+                {
+                    customstate.Allowed = false;
+                }
             }
-            else
-                bRet = true;
-            return bRet;
+            return customstate.Allowed;
         }
 
         /// <summary>
@@ -2080,7 +2087,8 @@ namespace Neos.IdentityServer.MultiFactor
     /// </summary>
     public class MFAAuthState
     {
-        public bool Checked { get; set; }
+        public bool Checked { get; set; } = false;
+        public bool Allowed { get; set; } = false;
     }
     #endregion
 }

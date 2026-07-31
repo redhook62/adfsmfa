@@ -12,7 +12,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                               //
 //                                                                                                                                                                                          //
 //                                                                                                                                                                                          //
-// https://github.com/neos-sdi/adfsmfa                                                                                                                                                      //
+// https://github.com/redhook62/adfsmfa                                                                                                                                                     //
 //                                                                                                                                                                                          //
 //******************************************************************************************************************************************************************************************//
 using Neos.IdentityServer.MultiFactor.Common;
@@ -3690,15 +3690,24 @@ namespace Neos.IdentityServer.MultiFactor
             {
                 if (encrypt)
                 {
-                    using (SystemEncryption MSIS = new SystemEncryption())
+                    int chk = 0;
+                    try
                     {
-                        config.KeysConfig.XORSecret = MSIS.Encrypt(config.KeysConfig.XORSecret, "Pass Phrase Encryption");
-                        config.Hosts.ActiveDirectoryHost.Password = MSIS.Encrypt(config.Hosts.ActiveDirectoryHost.Password, "ADDS Super Account Password");
-                        config.Hosts.SQLServerHost.SQLPassword = MSIS.Encrypt(config.Hosts.SQLServerHost.SQLPassword, "SQL Super Account Password");
-                        config.MailProvider.Password = MSIS.Encrypt(config.MailProvider.Password, "Mail Provider Account Password");
-                        config.DefaultPin = MSIS.Encrypt(config.DefaultPin, "Default Users Pin");
-                        config.AdministrationPin = MSIS.Encrypt(config.AdministrationPin, "Administration Pin");
-                    };
+                        chk = Convert.ToInt32(config.DefaultPin);
+                        using (SystemEncryption MSIS = new SystemEncryption())
+                        {
+                            config.KeysConfig.XORSecret = MSIS.Encrypt(config.KeysConfig.XORSecret, "Pass Phrase Encryption");
+                            config.Hosts.ActiveDirectoryHost.Password = MSIS.Encrypt(config.Hosts.ActiveDirectoryHost.Password, "ADDS Super Account Password");
+                            config.Hosts.SQLServerHost.SQLPassword = MSIS.Encrypt(config.Hosts.SQLServerHost.SQLPassword, "SQL Super Account Password");
+                            config.MailProvider.Password = MSIS.Encrypt(config.MailProvider.Password, "Mail Provider Account Password");
+                            config.DefaultPin = MSIS.Encrypt(config.DefaultPin, "Default Users Pin");
+                            config.AdministrationPin = MSIS.Encrypt(config.AdministrationPin, "Administration Pin");
+                        };
+                    }
+                    catch 
+                    { 
+                         // No Need to Encrypt
+                    }
                 }
                 config.LastUpdated = DateTime.UtcNow;
                 using (FileStream stm = new FileStream(pth, FileMode.CreateNew, FileAccess.ReadWrite))
@@ -3755,15 +3764,24 @@ namespace Neos.IdentityServer.MultiFactor
             {
                 if (encrypt)
                 {
-                    using (SystemEncryption MSIS = new SystemEncryption())
+                    int chk = 0;
+                    try
                     {
-                        config.KeysConfig.XORSecret = MSIS.Encrypt(config.KeysConfig.XORSecret, "Pass Phrase Encryption");
-                        config.Hosts.ActiveDirectoryHost.Password = MSIS.Encrypt(config.Hosts.ActiveDirectoryHost.Password, "ADDS Super Account Password");
-                        config.Hosts.SQLServerHost.SQLPassword = MSIS.Encrypt(config.Hosts.SQLServerHost.SQLPassword, "SQL Super Account Password");
-                        config.MailProvider.Password = MSIS.Encrypt(config.MailProvider.Password, "Mail Provider Account Password");
-                        config.DefaultPin = MSIS.Encrypt(config.DefaultPin, "Default Users Pin");
-                        config.AdministrationPin = MSIS.Encrypt(config.AdministrationPin, "Administration Pin");
-                    };
+                        chk = Convert.ToInt32(config.DefaultPin);
+                        using (SystemEncryption MSIS = new SystemEncryption())
+                        {
+                            config.KeysConfig.XORSecret = MSIS.Encrypt(config.KeysConfig.XORSecret, "Pass Phrase Encryption");
+                            config.Hosts.ActiveDirectoryHost.Password = MSIS.Encrypt(config.Hosts.ActiveDirectoryHost.Password, "ADDS Super Account Password");
+                            config.Hosts.SQLServerHost.SQLPassword = MSIS.Encrypt(config.Hosts.SQLServerHost.SQLPassword, "SQL Super Account Password");
+                            config.MailProvider.Password = MSIS.Encrypt(config.MailProvider.Password, "Mail Provider Account Password");
+                            config.DefaultPin = MSIS.Encrypt(config.DefaultPin, "Default Users Pin");
+                            config.AdministrationPin = MSIS.Encrypt(config.AdministrationPin, "Administration Pin");
+                        };
+                    }
+                    catch 
+                    { 
+                        // No Need To Encrypt
+                    }
                 }
                 XmlConfigSerializer xmlserializer = new XmlConfigSerializer(typeof(MFAConfig));
                 MemoryStream stm = new MemoryStream();

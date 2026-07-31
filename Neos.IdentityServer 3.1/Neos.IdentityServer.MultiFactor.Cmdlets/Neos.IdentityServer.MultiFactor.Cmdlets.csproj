@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>Neos.IdentityServer.MultiFactor.Cmdlets.dll-help.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Neos.IdentityServer.MultiFactor.Cmdlets.dll-help.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <LangVersion>7.2</LangVersion>
