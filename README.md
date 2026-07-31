@@ -18,7 +18,7 @@ This extension works with Active Directory or an SQL Server Database for storing
 ## Installation & Documentation
 * <https://github.com/redhook62/adfsmfa/wiki/Home>
 ## Downloads
-- <https://github.com/redhook62/adfsmfa/releases
+- https://github.com/redhook62/adfsmfa/releases
 
 ## Building Solution
 
