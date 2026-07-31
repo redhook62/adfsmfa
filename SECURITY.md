@@ -2,7 +2,9 @@
 
 Binary builds are always signed !
 
-Verify that the thumprint signature is : 86d7e03b3fb10a062f39bd98119856165b64c827
+Verify that the thumprint of the signin certificate is : 36d74732d76711bca23205ed8e38c26e1374f3bf
+
+Timestamp is delivered by Digicert
 
 ## Supported Versions
 
