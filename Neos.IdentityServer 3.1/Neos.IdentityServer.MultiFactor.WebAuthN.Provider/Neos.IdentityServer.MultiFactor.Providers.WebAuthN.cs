@@ -928,6 +928,7 @@ namespace Neos.IdentityServer.MultiFactor.WebAuthN
                         }
                         else
                             ctx.PinRequirements = false;
+
                         error = string.Empty;
                         return (int)AuthenticationResponseKind.Biometrics;
                     }

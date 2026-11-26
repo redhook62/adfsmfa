@@ -530,8 +530,8 @@ namespace Neos.IdentityServer.MultiFactor
             try
             {
                 string totp = proofData.Properties["totp"].ToString();
-                bool pincode = proofData.Properties.TryGetValue("pincode", out object pin);
                 int lnk = Convert.ToInt32(proofData.Properties["selected"].ToString());
+                
                 if (lnk == 0)
                 {
                     if (usercontext.CurrentRetries >= Config.MaxRetries)
@@ -549,24 +549,34 @@ namespace Neos.IdentityServer.MultiFactor
                         string error = string.Empty;
                         if ((int)AuthenticationResponseKind.Error != SetAuthenticationResult(usercontext, totp, out error))
                         {
-                            if (pincode)
+                            if (usercontext.PinRequired)
                             {
-                                if (Convert.ToInt32(pin) < 0)
-                                    pin = Config.DefaultPin;
-                                if (Convert.ToInt32(pin) != usercontext.PinCode)
+                                object pin = proofData.Properties["pincode"];
+                                if (pin != null)
                                 {
-                                    if (usercontext.CurrentRetries >= Config.MaxRetries)
+                                    if (Convert.ToInt32(pin) <= 0)
+                                        pin = Config.DefaultPin;
+                                    if (Convert.ToInt32(pin) != usercontext.PinCode)
                                     {
-                                        usercontext.UIMode = ProviderPageMode.Locking;
-                                        return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRestart"), ProviderPageMode.DefinitiveError);
+                                        if (usercontext.CurrentRetries >= Config.MaxRetries)
+                                        {
+                                            usercontext.UIMode = ProviderPageMode.Locking;
+                                            return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRestart"), ProviderPageMode.DefinitiveError);
+                                        }
+                                        else
+                                        {
+                                            usercontext.UIMode = ProviderPageMode.Identification;
+                                            return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRetry"), false);
+                                        }
                                     }
                                     else
-                                    {
-                                        usercontext.UIMode = ProviderPageMode.Identification;
-                                        return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRetry"), false);
-                                    }
+                                        usercontext.PinDone = true;
                                 }
-                                usercontext.PinDone = true;
+                                else
+                                {
+                                    usercontext.UIMode = ProviderPageMode.Locking;
+                                    return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRestart"), ProviderPageMode.DefinitiveError);
+                                }
                             }
                             claims = new Claim[] { GetAuthMethodClaim(usercontext.SelectedMethod) };
 
@@ -629,11 +639,7 @@ namespace Neos.IdentityServer.MultiFactor
                             {
                                 usercontext.UIMode = ProviderPageMode.Identification;
                                 if (!string.IsNullOrEmpty(error))
-                                {
-                                    return new AdapterPresentation(this, context, error, false);
-                                    // usercontext.UIMode = ProviderPageMode.Locking;
-                                    // return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.Errors, "ErrorReplayToken"), ProviderPageMode.DefinitiveError);
-                                }
+                                   return new AdapterPresentation(this, context, error, false);
                                 else
                                     return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRetry"), false);
                             }
@@ -1510,17 +1516,31 @@ namespace Neos.IdentityServer.MultiFactor
             claims = new Claim[] { GetAuthMethodClaim(usercontext.SelectedMethod) };
             try
             {
-                bool pincode = proofData.Properties.TryGetValue("pincode", out object pin);
-                if (pincode)
+                if ((usercontext.PinRequirements) || (usercontext.PinRequired))
                 {
-                    if (Convert.ToInt32(pin) <= 0)
-                        pin = Config.DefaultPin;
-                    if (Convert.ToInt32(pin) != usercontext.PinCode)
+                    object pin = proofData.Properties["pincode"];
+                    if ((pin!=null) && (!usercontext.PinDone))
                     {
-                        usercontext.UIMode = ProviderPageMode.Locking;
-                        return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRestart"), ProviderPageMode.DefinitiveError);
+                        if (pin == null || Convert.ToInt32(pin) <= 0)
+                            pin = Config.DefaultPin;
+                        if (Convert.ToInt32(pin) != usercontext.PinCode)
+                        {
+                            if (usercontext.CurrentRetries >= Config.MaxRetries)
+                            {
+                                usercontext.CurrentRetries++;
+                                usercontext.UIMode = ProviderPageMode.Locking;
+                                return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRestart"), ProviderPageMode.DefinitiveError);
+                            }
+                            else
+                            {
+                                usercontext.CurrentRetries++;
+                                usercontext.UIMode = ProviderPageMode.Bypass;
+                                return new AdapterPresentation(this, context, Resources.GetString(ResourcesLocaleKind.UIErrors, "ErrorInvalidIdentificationRetry"), false);
+                            }
+                        }
+                        else
+                            usercontext.PinDone = true;
                     }
-                    usercontext.PinDone = true;
                 }
 
                 usercontext.KeyChanged = false;
@@ -2754,8 +2774,10 @@ namespace Neos.IdentityServer.MultiFactor
                     case 3: // Code verification
                         try
                         {
-                            int totp = Convert.ToInt32(proofData.Properties["pincode"]);                           
-                            if (usercontext.PinCode != totp)
+                            bool pincode2 = proofData.Properties.TryGetValue("pincode", out object pin2);
+                            if (pin2 == null || Convert.ToInt32(pin2) <= 0)
+                                pin2 = Config.DefaultPin;
+                            if (usercontext.PinCode != Convert.ToInt32(pin2))
                             {
                                 usercontext.WizPageID = 4;
                                 usercontext.UIMode = ProviderPageMode.EnrollPin;
@@ -2773,8 +2795,10 @@ namespace Neos.IdentityServer.MultiFactor
                             return new AdapterPresentation(this, context, ex.Message, false);
                         }
                     case 4: // Code validation
-                        int totp2 = Convert.ToInt32(proofData.Properties["pincode"]);                           
-                        if (usercontext.PinCode == totp2)
+                        bool pincode = proofData.Properties.TryGetValue("pincode", out object pin);
+                        if (pin == null || Convert.ToInt32(pin) <= 0)
+                            pin = Config.DefaultPin;
+                        if (usercontext.PinCode != Convert.ToInt32(pin))
                         {
                             try
                             {

@@ -1246,6 +1246,7 @@ namespace Neos.IdentityServer.MultiFactor
                 result += "<input id=\"context\" type=\"hidden\" name=\"Context\" value=\"%Context%\"/>";
                 result += "<input id=\"authMethod\" type=\"hidden\" name=\"AuthMethod\" value=\"%AuthMethod%\"/>";
             }
+            result += GetFormHtmlMessageZone(usercontext);
             result += "</form>";
             return result;
         }

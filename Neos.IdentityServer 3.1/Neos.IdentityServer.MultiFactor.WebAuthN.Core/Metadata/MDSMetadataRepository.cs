@@ -16,17 +16,20 @@
 // https://github.com/redhook62/adfsmfa                                                                                                                                                     //
 //                                                                                                                                                                                          //
 //******************************************************************************************************************************************************************************************//
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.JsonWebTokens;
-using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 // using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Neos.IdentityServer.MultiFactor.WebAuthN.Metadata
@@ -181,11 +184,10 @@ namespace Neos.IdentityServer.MultiFactor.WebAuthN.Metadata
                     }
                 }
             }
-
+#if !SPVER
             if (!certChainIsValid)
                 throw new VerificationException("Failed to validate cert chain while parsing BLOB");
 
-#if !SPVER
             var tokenHandler = new JsonWebTokenHandler
             {
                   // 250k isn't enough bytes for conformance test tool
@@ -209,14 +211,26 @@ namespace Neos.IdentityServer.MultiFactor.WebAuthN.Metadata
             var blobPayload = ((JsonWebToken)validateTokenResult.SecurityToken).EncodedPayload;
 #else
             var blobPayload = Encoding.UTF8.GetString(Base64Url.Decode(jwtParts[1]));
-#endif            
-            var blob = Newtonsoft.Json.JsonConvert.DeserializeObject<MetadataBLOBPayload>(blobPayload);
-
+#endif
+            var blob = Newtonsoft.Json.JsonConvert.DeserializeObject<MetadataBLOBPayload>(blobPayload, new Newtonsoft.Json.JsonSerializerSettings
+            {
+                MissingMemberHandling = Newtonsoft.Json.MissingMemberHandling.Ignore,
+                Error = HandleDeserializationError,
+            });
+            
             infos.Number = blob.Number;
             infos.NextUpdate = Convert.ToDateTime(blob.NextUpdate);
             infos.CanDownload = true; 
             blob.JwtAlg = blobAlg;
             return blob;
+        }
+
+        /// <summary>
+        /// HandleDeserializationError method implementation 
+        /// </summary>
+        internal void HandleDeserializationError(object context, ErrorEventArgs errorContext)
+        {
+            errorContext.ErrorContext.Handled = true;
         }
 
         #region downloads
